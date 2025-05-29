@@ -3,6 +3,12 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>disable</Nullable>
+        <Authors>bbhxwl</Authors>
+        <Description>Add Realtime client
+</Description>
+        <PackageProjectUrl>https://github.com/bbhxwl/CloudFlareSharp.git</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/bbhxwl/CloudFlareSharp.git</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,9 @@ namespace CloudFlareSharp.Api
         {
             var url = $"{BaseUrl}/apps/{_appId}/sessions/{sessionId}/tracks/new";
             var json = JsonConvert.SerializeObject(request);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            Console.WriteLine(json);
+            var content = new StringContent(json);
+            content.Headers.ContentType= new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             var response = await _httpClient.PostAsync(url, content);
             var responseContent = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<TracksResponse>(responseContent);
@@ -87,58 +90,58 @@ namespace CloudFlareSharp.Api
 
         public class SessionDescription
         {
-            [JsonProperty("sdp")]
+            [JsonProperty("sdp", NullValueHandling = NullValueHandling.Ignore)]
             public string Sdp { get; set; }
 
-            [JsonProperty("type")]
+            [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
             public string Type { get; set; }
         }
 
         public class TrackObject
         {
-            [JsonProperty("location")]
+            [JsonProperty("location", NullValueHandling = NullValueHandling.Ignore)]
             public string Location { get; set; }
 
-            [JsonProperty("mid")]
+            [JsonProperty("mid", NullValueHandling = NullValueHandling.Ignore)]
             public string Mid { get; set; }
 
-            [JsonProperty("sessionId")]
+            [JsonProperty("sessionId", NullValueHandling = NullValueHandling.Ignore)]
             public string SessionId { get; set; }
 
-            [JsonProperty("trackName")]
+            [JsonProperty("trackName", NullValueHandling = NullValueHandling.Ignore)]
             public string TrackName { get; set; }
 
-            [JsonProperty("bidirectionalMediaStream")]
+            [JsonProperty("bidirectionalMediaStream", NullValueHandling = NullValueHandling.Ignore)]
             public bool? BidirectionalMediaStream { get; set; }
 
-            [JsonProperty("kind")]
+            [JsonProperty("kind", NullValueHandling = NullValueHandling.Ignore)]
             public string Kind { get; set; }
 
-            [JsonProperty("simulcast")]
+            [JsonProperty("simulcast", NullValueHandling = NullValueHandling.Ignore)]
             public SimulcastConfig Simulcast { get; set; }
         }
 
         public class SimulcastConfig
         {
-            [JsonProperty("preferredRid")]
+            [JsonProperty("preferredRid", NullValueHandling = NullValueHandling.Ignore)]
             public string PreferredRid { get; set; }
 
-            [JsonProperty("priorityOrdering")]
+            [JsonProperty("priorityOrdering", NullValueHandling = NullValueHandling.Ignore)]
             public string PriorityOrdering { get; set; }
 
-            [JsonProperty("ridNotAvailable")]
+            [JsonProperty("ridNotAvailable", NullValueHandling = NullValueHandling.Ignore)]
             public string RidNotAvailable { get; set; }
         }
         public class TracksRequest
         {
-            [JsonProperty("sessionDescription")]
+            [JsonProperty("sessionDescription", NullValueHandling = NullValueHandling.Ignore)]
             public SessionDescription SessionDescription { get; set; }
 
-            [JsonProperty("tracks")]
+            [JsonProperty("tracks", NullValueHandling = NullValueHandling.Ignore)]
             public TrackObject[] Tracks { get; set; }
 
-            [JsonProperty("autoDiscover")]
-            public bool? AutoDiscover { get; set; }
+            // [JsonProperty("autoDiscover")]
+            // public bool? AutoDiscover { get; set; }
         }
 
         public class TracksResponse
@@ -176,19 +179,19 @@ namespace CloudFlareSharp.Api
 
         public class CloseTracksRequest
         {
-            [JsonProperty("sessionDescription")]
+            [JsonProperty("sessionDescription", NullValueHandling = NullValueHandling.Ignore)]
             public SessionDescription SessionDescription { get; set; }
 
-            [JsonProperty("tracks")]
+            [JsonProperty("tracks", NullValueHandling = NullValueHandling.Ignore)]
             public CloseTrackObject[] Tracks { get; set; }
 
-            [JsonProperty("force")]
+            [JsonProperty("force", NullValueHandling = NullValueHandling.Ignore)]
             public bool? Force { get; set; }
         }
 
         public class CloseTrackObject
         {
-            [JsonProperty("mid")]
+            [JsonProperty("mid", NullValueHandling = NullValueHandling.Ignore)]
             public string Mid { get; set; }
         }
 
@@ -230,28 +233,28 @@ namespace CloudFlareSharp.Api
 
         public class RenegotiateRequest
         {
-            [JsonProperty("sessionDescription")]
+            [JsonProperty("sessionDescription", NullValueHandling = NullValueHandling.Ignore)]
             public SessionDescription SessionDescription { get; set; }
         }
 
         public class RenegotiateResponse
         {
-            [JsonProperty("errorCode")]
+            [JsonProperty("errorCode", NullValueHandling = NullValueHandling.Ignore)]
             public string ErrorCode { get; set; }
 
-            [JsonProperty("errorDescription")]
+            [JsonProperty("errorDescription", NullValueHandling = NullValueHandling.Ignore)]
             public string ErrorDescription { get; set; }
 
-            [JsonProperty("sessionDescription")]
+            [JsonProperty("sessionDescription", NullValueHandling = NullValueHandling.Ignore)]
             public SessionDescription SessionDescription { get; set; }
         }
 
         public class UpdateTracksRequest
         {
-            [JsonProperty("tracks")]
+            [JsonProperty("tracks", NullValueHandling = NullValueHandling.Ignore)]
             public TrackObject[] Tracks { get; set; }
 
-            [JsonProperty("sessionDescription")]
+            [JsonProperty("sessionDescription", NullValueHandling = NullValueHandling.Ignore)]
             public SessionDescription SessionDescription { get; set; }
         }
 

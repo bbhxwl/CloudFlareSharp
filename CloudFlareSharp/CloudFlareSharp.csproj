@@ -9,6 +9,7 @@
         <PackageProjectUrl>https://github.com/bbhxwl/CloudFlareSharp.git</PackageProjectUrl>
         <RepositoryUrl>https://github.com/bbhxwl/CloudFlareSharp.git</RepositoryUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Version>1.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>

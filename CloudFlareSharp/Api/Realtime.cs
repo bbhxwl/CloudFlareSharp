@@ -12,15 +12,18 @@ namespace CloudFlareSharp.Api
         private const string BaseUrl = "https://rtc.live.cloudflare.com/v1";
         private readonly string _appId;
         private readonly string _token;
-        public Realtime(string appId,string token)
+
+        public Realtime(string appId, string token)
         {
             this._appId = appId;
             this._token = token;
             _httpClient = new HttpClient();
-            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
         }
 
-        public async Task<NewSessionResponse> CreateNewSessionAsync(bool? thirdParty = null, string correlationId = null)
+        public async Task<NewSessionResponse> CreateNewSessionAsync(bool? thirdParty = null,
+            string correlationId = null)
         {
             var url = $"{BaseUrl}/apps/{_appId}/sessions/new";
             if (thirdParty.HasValue)
@@ -37,9 +40,8 @@ namespace CloudFlareSharp.Api
         {
             var url = $"{BaseUrl}/apps/{_appId}/sessions/{sessionId}/tracks/new";
             var json = JsonConvert.SerializeObject(request);
-            Console.WriteLine(json);
             var content = new StringContent(json);
-            content.Headers.ContentType= new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             var response = await _httpClient.PostAsync(url, content);
             var responseContent = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<TracksResponse>(responseContent);
@@ -85,6 +87,7 @@ namespace CloudFlareSharp.Api
             var content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<GetSessionStateResponse>(content);
         }
+
 
         #region Models
 
@@ -132,6 +135,7 @@ namespace CloudFlareSharp.Api
             [JsonProperty("ridNotAvailable", NullValueHandling = NullValueHandling.Ignore)]
             public string RidNotAvailable { get; set; }
         }
+
         public class TracksRequest
         {
             [JsonProperty("sessionDescription", NullValueHandling = NullValueHandling.Ignore)]
@@ -146,35 +150,27 @@ namespace CloudFlareSharp.Api
 
         public class TracksResponse
         {
-            [JsonProperty("errorCode")]
-            public string ErrorCode { get; set; }
+            [JsonProperty("errorCode")] public string ErrorCode { get; set; }
 
-            [JsonProperty("errorDescription")]
-            public string ErrorDescription { get; set; }
+            [JsonProperty("errorDescription")] public string ErrorDescription { get; set; }
 
             [JsonProperty("requiresImmediateRenegotiation")]
             public bool RequiresImmediateRenegotiation { get; set; }
 
-            [JsonProperty("sessionDescription")]
-            public SessionDescription SessionDescription { get; set; }
+            [JsonProperty("sessionDescription")] public SessionDescription SessionDescription { get; set; }
 
-            [JsonProperty("tracks")]
-            public TrackObject[] Tracks { get; set; }
+            [JsonProperty("tracks")] public TrackObject[] Tracks { get; set; }
         }
 
         public class NewSessionResponse
         {
-            [JsonProperty("sessionId")]
-            public string SessionId { get; set; }
+            [JsonProperty("sessionId")] public string SessionId { get; set; }
 
-            [JsonProperty("errorCode")]
-            public string ErrorCode { get; set; }
+            [JsonProperty("errorCode")] public string ErrorCode { get; set; }
 
-            [JsonProperty("errorDescription")]
-            public string ErrorDescription { get; set; }
+            [JsonProperty("errorDescription")] public string ErrorDescription { get; set; }
 
-            [JsonProperty("sessionDescription")]
-            public SessionDescription SessionDescription { get; set; }
+            [JsonProperty("sessionDescription")] public SessionDescription SessionDescription { get; set; }
         }
 
         public class CloseTracksRequest
@@ -197,17 +193,13 @@ namespace CloudFlareSharp.Api
 
         public class CloseTracksResponse
         {
-            [JsonProperty("errorCode")]
-            public string ErrorCode { get; set; }
+            [JsonProperty("errorCode")] public string ErrorCode { get; set; }
 
-            [JsonProperty("errorDescription")]
-            public string ErrorDescription { get; set; }
+            [JsonProperty("errorDescription")] public string ErrorDescription { get; set; }
 
-            [JsonProperty("sessionDescription")]
-            public SessionDescription SessionDescription { get; set; }
+            [JsonProperty("sessionDescription")] public SessionDescription SessionDescription { get; set; }
 
-            [JsonProperty("tracks")]
-            public CloseTrackObject[] Tracks { get; set; }
+            [JsonProperty("tracks")] public CloseTrackObject[] Tracks { get; set; }
 
             [JsonProperty("requiresImmediateRenegotiation")]
             public bool RequiresImmediateRenegotiation { get; set; }
@@ -215,20 +207,16 @@ namespace CloudFlareSharp.Api
 
         public class GetSessionStateResponse
         {
-            [JsonProperty("errorCode")]
-            public string ErrorCode { get; set; }
+            [JsonProperty("errorCode")] public string ErrorCode { get; set; }
 
-            [JsonProperty("errorDescription")]
-            public string ErrorDescription { get; set; }
+            [JsonProperty("errorDescription")] public string ErrorDescription { get; set; }
 
-            [JsonProperty("tracks")]
-            public SessionTrackObject[] Tracks { get; set; }
+            [JsonProperty("tracks")] public SessionTrackObject[] Tracks { get; set; }
         }
 
         public class SessionTrackObject : TrackObject
         {
-            [JsonProperty("status")]
-            public string Status { get; set; }
+            [JsonProperty("status")] public string Status { get; set; }
         }
 
         public class RenegotiateRequest
@@ -260,20 +248,65 @@ namespace CloudFlareSharp.Api
 
         public class UpdateTracksResponse
         {
-            [JsonProperty("errorCode")]
-            public string ErrorCode { get; set; }
+            [JsonProperty("errorCode")] public string ErrorCode { get; set; }
 
-            [JsonProperty("errorDescription")]
-            public string ErrorDescription { get; set; }
+            [JsonProperty("errorDescription")] public string ErrorDescription { get; set; }
 
             [JsonProperty("requiresImmediateRenegotiation")]
             public bool RequiresImmediateRenegotiation { get; set; }
 
-            [JsonProperty("tracks")]
-            public TrackObject[] Tracks { get; set; }
+            [JsonProperty("tracks")] public TrackObject[] Tracks { get; set; }
+        }
+
+        public class DataChannelObject
+        {
+            [JsonProperty("location", NullValueHandling = NullValueHandling.Ignore)]
+            public string Location { get; set; }
+
+            [JsonProperty("dataChannelName", NullValueHandling = NullValueHandling.Ignore)]
+            public string DataChannelName { get; set; }
+
+            [JsonProperty("sessionId", NullValueHandling = NullValueHandling.Ignore)]
+            public string SessionId { get; set; }
+        }
+
+        public class DataChannelResponseObject
+        {
+            [JsonProperty("location", NullValueHandling = NullValueHandling.Ignore)]
+            public string Location { get; set; }
+
+            [JsonProperty("dataChannelName", NullValueHandling = NullValueHandling.Ignore)]
+            public string DataChannelName { get; set; }
+
+            [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+            public int Id { get; set; }
+        }
+
+        public class DataChannelsRequest
+        {
+            [JsonProperty("dataChannels", NullValueHandling = NullValueHandling.Ignore)]
+            public DataChannelObject[] DataChannels { get; set; }
+        }
+
+        public class DataChannelsResponse
+        {
+            [JsonProperty("errorCode")] public string ErrorCode { get; set; }
+
+            [JsonProperty("errorDescription")] public string ErrorDescription { get; set; }
+
+            [JsonProperty("dataChannels")] public DataChannelResponseObject[] DataChannels { get; set; }
         }
 
         #endregion
-        
+
+        public async Task<DataChannelsResponse> CreateDataChannelsAsync(string sessionId, DataChannelsRequest request)
+        {
+            var url = $"{BaseUrl}/apps/{_appId}/sessions/{sessionId}/datachannels/new";
+            var json = JsonConvert.SerializeObject(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync(url, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<DataChannelsResponse>(responseContent);
+        }
     }
 }

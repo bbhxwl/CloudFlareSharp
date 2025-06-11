@@ -12,18 +12,22 @@ namespace CloudFlareSharp
         private readonly HttpClient _httpClient;
         private readonly string _apiToken;
         private SFU _sfu;
-        
+        public string AuthEmail = "";
+        public string AuthKey = "";
         public CloudFlare(string apiToken)
         {
         }
         public CloudFlare(string authEmail,string authKey)
         {
+            this.AuthEmail = authEmail;
+            this.AuthKey = authKey;
+            Vectorize=new Vectorize(this);
         }
         
-
         /// <summary>
         /// 获取SFU API
         /// </summary>
         public SFU SFU => _sfu ??= new SFU();
+        public Vectorize Vectorize;
     }
 }

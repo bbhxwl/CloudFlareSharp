@@ -21,11 +21,22 @@ namespace CloudFlareSharp.Helper
 
         public async Task<T> PostAsync<T>(string path, object data)
         {
-            StringContent sc = new StringContent(JsonConvert.SerializeObject(data));
-            var str = await (await _httpClient.PostAsync(urlBase + path, sc)).Content.ReadAsStringAsync();
+            var q = JsonConvert.SerializeObject(data);
+            StringContent sc = new StringContent(q, System.Text.Encoding.UTF8, "application/json");
+            string tempUrl = "";
+            if (path.StartsWith("https://")) // Ensure the path does not start with a slash
+            {
+                tempUrl = path;
+            }
+            else
+            {
+                tempUrl = urlBase;
+            }
+            var str = await (await _httpClient.PostAsync(tempUrl, sc)).Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(str);
         }
 
+       
         private string ConvertToQueryString(object parameters)
         {
             if (parameters == null) return string.Empty;

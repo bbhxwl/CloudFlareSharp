@@ -24,7 +24,22 @@ namespace CloudFlareSharp.Helper
             var q = JsonConvert.SerializeObject(data);
             StringContent sc = new StringContent(q, System.Text.Encoding.UTF8, "application/json");
             string tempUrl = "";
-            if (path.StartsWith("https://")) // Ensure the path does not start with a slash
+            if (path.StartsWith("https://"))
+            {
+                tempUrl = path;
+            }
+            else
+            {
+                tempUrl = urlBase;
+            }
+            var str = await (await _httpClient.PostAsync(tempUrl, sc)).Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<T>(str);
+        }
+        public async Task<T> PostNdJsonAsync<T>(string path, string ndjson)
+        {
+            StringContent sc = new StringContent(ndjson, System.Text.Encoding.UTF8, "application/x-ndjson");
+            string tempUrl = "";
+            if (path.StartsWith("https://"))
             {
                 tempUrl = path;
             }

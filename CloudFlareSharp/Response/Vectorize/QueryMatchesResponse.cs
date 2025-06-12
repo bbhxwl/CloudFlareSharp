@@ -11,7 +11,7 @@ namespace CloudFlareSharp.Response.Vectorize
         [JsonProperty("namespace")]
         public string Namespace { get; set; }
         [JsonProperty("score")]
-        public decimal Score { get; set; }
+        public double Score { get; set; }
         [JsonProperty("values")]
         public List<double>? Values { get; set; }
         

@@ -2,8 +2,8 @@
 {
     public enum VectorReturnMetadataEnum
     {
-        none=0,
-        indexed=1,
-        all=2
+        None=0,
+        Indexed=1,
+        All=2
     }
 }

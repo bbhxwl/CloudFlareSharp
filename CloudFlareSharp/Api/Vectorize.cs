@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using CloudFlareSharp.Helper;
 using CloudFlareSharp.Response;
@@ -29,7 +30,7 @@ namespace CloudFlareSharp.Api
             });
             return res;
         }
-        public async Task<CloudflareCommonResponse<QueryResponse>> Query(string accountId,string indexName,List<double> vector,object filter=null,VectorReturnMetadataEnum returnMetadata= VectorReturnMetadataEnum.none,bool returnValues=false,int topK=5)
+        public async Task<CloudflareCommonResponse<QueryResponse>> Query(string accountId,string indexName,List<double> vector,object filter=null,VectorReturnMetadataEnum returnMetadata= VectorReturnMetadataEnum.None,bool returnValues=false,int topK=5)
         {
             var res=await http.PostAsync<CloudflareCommonResponse<QueryResponse>>($"{BaseUrl}/{accountId}/vectorize/v2/indexes/{indexName}/query",new
             {
@@ -41,8 +42,46 @@ namespace CloudFlareSharp.Api
             });
             return res;
         }
-        
-        public async Task<CloudflareCommonResponse<QueryResponse>> QueryById(string accountId,string indexName,string id,object filter=null,VectorReturnMetadataEnum returnMetadata= VectorReturnMetadataEnum.none,bool returnValues=false,int topK=5)
+        public async Task<CloudflareCommonResponse<UpsertResponse>> Upsert(string accountId,string indexName, List<InsertAndUpsertList> list, UnparsableBehaviorEnum unparsableBehavior= UnparsableBehaviorEnum.Error)
+        {
+            StringBuilder url = new StringBuilder( $"{BaseUrl}/{accountId}/vectorize/v2/indexes/{indexName}/upsert");
+            if (unparsableBehavior == UnparsableBehaviorEnum.Error)
+            {
+                url.Append($"?unparsable-behavior=error");
+            }
+            else
+            {
+                url.Append($"?unparsable-behavior=discard");
+            }
+            StringBuilder body = new StringBuilder();
+            foreach (var  item in list)
+            {
+                body.Append(JsonConvert.SerializeObject(item)+"\n");
+            }
+            var res=await http.PostNdJsonAsync<CloudflareCommonResponse<UpsertResponse>>(url.ToString(),body.ToString());
+            return res;
+        }
+        public async Task<CloudflareCommonResponse<UpsertResponse>> Insert(string accountId,string indexName, List<InsertAndUpsertList> list, UnparsableBehaviorEnum unparsableBehavior= UnparsableBehaviorEnum.Error)
+        {
+            StringBuilder url = new StringBuilder( $"{BaseUrl}/{accountId}/vectorize/v2/indexes/{indexName}/insert");
+            if (unparsableBehavior == UnparsableBehaviorEnum.Error)
+            {
+                url.Append($"?unparsable-behavior=error");
+            }
+            else
+            {
+                url.Append($"?unparsable-behavior=discard");
+            }
+            StringBuilder body = new StringBuilder();
+            foreach (var  item in list)
+            {
+                body.Append(JsonConvert.SerializeObject(item)+"\n");
+            }
+            var res=await http.PostNdJsonAsync<CloudflareCommonResponse<UpsertResponse>>(url.ToString(),body.ToString());
+            return res;
+        }
+
+        public async Task<CloudflareCommonResponse<QueryResponse>> QueryById(string accountId,string indexName,string id,object filter=null,VectorReturnMetadataEnum returnMetadata= VectorReturnMetadataEnum.None,bool returnValues=false,int topK=5)
         {
             var rs = await GetByIds(accountId, indexName, new List<string> { id });
             if (rs.Result ==null || rs.Result.Count == 0)

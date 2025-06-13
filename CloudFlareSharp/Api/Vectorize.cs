@@ -36,7 +36,7 @@ namespace CloudFlareSharp.Api
             {
                 vector,
                 filter,
-                returnMetadata=returnMetadata.ToString(),
+                returnMetadata=returnMetadata.ToString().ToLower(),
                 returnValues,
                 topK
             });

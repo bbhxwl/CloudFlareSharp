@@ -30,6 +30,7 @@ namespace CloudFlareSharp.Api
             {
                 ttl
             }));
+            sc.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", turnKeyApiToken);
             var rs=await http.PostAsync($"https://rtc.live.cloudflare.com/v1/turn/keys/{turnKeyId}/credentials/generate-ice-servers",sc);
             var str=await rs.Content.ReadAsStringAsync();

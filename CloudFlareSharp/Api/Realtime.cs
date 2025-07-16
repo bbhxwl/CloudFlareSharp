@@ -1,8 +1,11 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using CloudFlareSharp.Response.Realtime;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CloudFlareSharp.Api
 {
@@ -12,7 +15,6 @@ namespace CloudFlareSharp.Api
         private const string BaseUrl = "https://rtc.live.cloudflare.com/v1";
         private readonly string _appId;
         private readonly string _token;
-
         public Realtime(string appId, string token)
         {
             this._appId = appId;
@@ -22,6 +24,22 @@ namespace CloudFlareSharp.Api
                 new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token);
         }
 
+        public static async Task<IceServersResponse> GenerateIceServers(HttpClient http,string turnKeyId,string turnKeyApiToken,int ttl = 86400)
+        {
+            StringContent sc = new StringContent( JsonConvert.SerializeObject(new
+            {
+                ttl
+            }));
+            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", turnKeyApiToken);
+            var rs=await http.PostAsync($"https://rtc.live.cloudflare.com/v1/turn/keys/{turnKeyId}/credentials/generate-ice-servers",sc);
+            var str=await rs.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<IceServersResponse>(str);
+        }
+        public static async Task<IceServersResponse> GenerateIceServers(string turnKeyId,string turnKeyApiToken,int ttl = 86400)
+        {
+            HttpClient http = new HttpClient();
+            return await GenerateIceServers(http,turnKeyId,turnKeyApiToken,ttl);
+        }
         public async Task<NewSessionResponse> CreateNewSessionAsync(bool? thirdParty = null,
             string correlationId = null)
         {
